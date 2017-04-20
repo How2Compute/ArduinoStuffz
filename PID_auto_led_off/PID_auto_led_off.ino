@@ -1,39 +1,39 @@
-//Made by: HowToCompute! 
+// Created by: HowToCompute
 
-//The config!
+// Configuration Parameters
 const int LED1 = 2;
-const int TimeToAutoOff = 3; //In seconds!
+const int timeToAutoOff = 3; // in seconds
 const int PIDPin = A5;
 
-//For keeping track of the time
-float TimeScinceLastActivity = 0.0;
+// Create a float to keep track of the time since the last PID activity
+float timeScinceLastActivity = 0.0;
 
-//Runs at the start!
+// Runs at the start!
 void setup() {
-  pinMode(LED1, OUTPUT); //Set LED1 as output, so it can be controlled
-  digitalWrite(LED1, HIGH); //Put LED1 on!
-  Serial.begin(9200); //Start the serial to print out data!
+  pinMode(LED1, OUTPUT); // Set LED1 as output, so it can be controlled
+  digitalWrite(LED1, HIGH); // Switched LED1 on!
+  Serial.begin(9200); // Start the serial to print out data!
 }
 
-//Run as many times as possible!
+// Run as many times as possible!
 void loop() {
-  if(digitalRead(4) == 1) { //If the button is pressed:
+  if(digitalRead(4) == 1) { // If the button is pressed:
    digitalWrite(LED1, HIGH);
-   TimeScinceLastActivity = 0; //Reset!
+   timeScinceLastActivity = 0; // Reset!
   }
   
-  if(digitalRead(PIDPin) == 0){ //Check if the PID has picked nothing up:
-    TimeScinceLastActivity += 0.01; //If it picked nothing up, add some time!
-  } else { //There must be some activity:
-    TimeScinceLastActivity = 0.0; //Reset the time!
+  if(digitalRead(PIDPin) == 0) { // Check if the PID has picked nothing up:
+    timeScinceLastActivity += 0.01; // If it picked nothing up, add the 10ms we waited!
+  } else { // There must be some activity:
+    timeScinceLastActivity = 0.0; // Reset the time
   }
-  if(TimeScinceLastActivity >= TimeToAutoOff){ //If the time is equal or over the time to auto off:
-    digitalWrite(LED1, LOW); //Switch the led off!
+  if(timeScinceLastActivity >= timeToAutoOff) { // If the time is equal or over the time to auto off:
+    digitalWrite(LED1, LOW); // Switch the led off
   }
-  //Log variables for debugging
-  Serial.println(TimeScinceLastActivity);
+  // Log variables for debugging
+  Serial.println(timeScinceLastActivity);
   Serial.println(digitalRead(PIDPin));
-  //End of logging
+  // End of logging
 
   //Wait for 10 miliseconds, this is sothat we can properly keep track of the time!
   delay(10);
